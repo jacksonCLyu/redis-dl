@@ -1,0 +1,168 @@
+version: '3.8'
+
+networks:
+  rd_net:
+    driver: ${NETWORKS_DRIVER}
+    name: rd_net
+    enable_ipv6: false
+    ipam:
+      config:
+          - subnet: 172.18.0.0/16
+            gateway: 172.18.0.1
+
+services:
+  # 单机 并且 用于创建集群
+  redis_6379:
+    image: redis:6.2.6
+    hostname: redis_6379
+    container_name: redis_6379
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-single/redis-6379/data:/data
+      - ./docker/redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    depends_on:
+      - redis_1
+      - redis_2
+      - redis_3
+      - redis_4
+      - redis_5
+      - redis_6
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.8
+    command:
+      - sh
+      - -c
+      - |
+        echo yes | redis-cli --cluster create 172.18.0.2:${NODE1_PORT} 172.18.0.3:${NODE2_PORT} 172.18.0.4:${NODE3_PORT} 172.18.0.5:${NODE4_PORT} 172.18.0.6:${NODE5_PORT} 172.18.0.7:${NODE6_PORT} --cluster-replicas 1
+        redis-server /etc/redis/redis.conf
+
+  # 集群
+  redis_1:
+    image: redis:6.2.6
+    hostname: redis_1
+    container_name: redis_1
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-1/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE1_PORT}:${NODE1_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.2
+    command: redis-server /etc/redis/redis.conf --port ${NODE1_PORT}
+
+  redis_2:
+    image: redis:6.2.6
+    hostname: redis_2
+    container_name: redis_2
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-2/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE2_PORT}:${NODE2_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.3
+    command: redis-server /etc/redis/redis.conf --port ${NODE2_PORT}
+
+  redis_3:
+    image: redis:6.2.6
+    hostname: redis_3
+    container_name: redis_3
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-3/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE3_PORT}:${NODE3_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.4
+    command: redis-server /etc/redis/redis.conf --port ${NODE3_PORT}
+
+  redis_4:
+    image: redis:6.2.6
+    hostname: redis_4
+    container_name: redis_4
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-4/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE4_PORT}:${NODE4_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.5
+    command: redis-server /etc/redis/redis.conf --port ${NODE4_PORT}
+
+  redis_5:
+    image: redis:6.2.6
+    hostname: redis_5
+    container_name: redis_5
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-5/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE5_PORT}:${NODE5_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.6
+    command: redis-server /etc/redis/redis.conf --port ${NODE5_PORT}
+
+  redis_6:
+    image: redis:6.2.6
+    hostname: redis_6
+    container_name: redis_6
+    restart: unless-stopped
+    environment:
+      TZ: ${TZ}
+      LANG: en_US.UTF-8
+      REDIS_PASSWORD: 123456
+    volumes:
+      - ${DATA_PATH_HOST}/redis-cluster/redis-6/data:/data
+      - ./docker/cluster-redis.conf:/etc/redis/redis.conf
+    ports:
+      - "${NODE6_PORT}:${NODE6_PORT}"
+    networks:
+      rd_net:
+        ipv4_address: 172.18.0.7
+    command: redis-server /etc/redis/redis.conf --port ${NODE6_PORT}
+
+  # mac-docker-connector 服务端
+  # mac-connector:
+  #   image: wenjunxiao/mac-docker-connector
+  #   container_name: mac-connector
+  #   restart: always
+  #   network_mode: host
+  #   cap_add:
+  #     - NET_ADMIN
