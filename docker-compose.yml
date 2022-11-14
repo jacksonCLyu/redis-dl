@@ -7,8 +7,8 @@ networks:
     enable_ipv6: false
     ipam:
       config:
-          - subnet: 172.18.0.0/16
-            gateway: 172.18.0.1
+          - subnet: 172.29.0.0/16
+            gateway: 172.29.0.1
 
 services:
   # 单机 并且 用于创建集群
@@ -35,12 +35,12 @@ services:
       - redis_6
     networks:
       rd_net:
-        ipv4_address: 172.18.0.8
+        ipv4_address: 172.29.0.8
     command:
       - sh
       - -c
       - |
-        echo yes | redis-cli --cluster create 172.18.0.2:${NODE1_PORT} 172.18.0.3:${NODE2_PORT} 172.18.0.4:${NODE3_PORT} 172.18.0.5:${NODE4_PORT} 172.18.0.6:${NODE5_PORT} 172.18.0.7:${NODE6_PORT} --cluster-replicas 1
+        echo yes | redis-cli --cluster create 172.29.0.2:${NODE1_PORT} 172.29.0.3:${NODE2_PORT} 172.29.0.4:${NODE3_PORT} 172.29.0.5:${NODE4_PORT} 172.29.0.6:${NODE5_PORT} 172.29.0.7:${NODE6_PORT} --cluster-replicas 1
         redis-server /etc/redis/redis.conf
 
   # 集群
@@ -60,7 +60,7 @@ services:
       - "${NODE1_PORT}:${NODE1_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.2
+        ipv4_address: 172.29.0.2
     command: redis-server /etc/redis/redis.conf --port ${NODE1_PORT}
 
   redis_2:
@@ -79,7 +79,7 @@ services:
       - "${NODE2_PORT}:${NODE2_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.3
+        ipv4_address: 172.29.0.3
     command: redis-server /etc/redis/redis.conf --port ${NODE2_PORT}
 
   redis_3:
@@ -98,7 +98,7 @@ services:
       - "${NODE3_PORT}:${NODE3_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.4
+        ipv4_address: 172.29.0.4
     command: redis-server /etc/redis/redis.conf --port ${NODE3_PORT}
 
   redis_4:
@@ -117,7 +117,7 @@ services:
       - "${NODE4_PORT}:${NODE4_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.5
+        ipv4_address: 172.29.0.5
     command: redis-server /etc/redis/redis.conf --port ${NODE4_PORT}
 
   redis_5:
@@ -136,7 +136,7 @@ services:
       - "${NODE5_PORT}:${NODE5_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.6
+        ipv4_address: 172.29.0.6
     command: redis-server /etc/redis/redis.conf --port ${NODE5_PORT}
 
   redis_6:
@@ -155,7 +155,7 @@ services:
       - "${NODE6_PORT}:${NODE6_PORT}"
     networks:
       rd_net:
-        ipv4_address: 172.18.0.7
+        ipv4_address: 172.29.0.7
     command: redis-server /etc/redis/redis.conf --port ${NODE6_PORT}
 
   # mac-docker-connector 服务端
