@@ -22,7 +22,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-single/redis-6379/data:/data
+      - ${SINGLE_DATA_PATH_HOST}/redis-6379/data:/data
       - ./docker/redis.conf:/etc/redis/redis.conf
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
@@ -54,7 +54,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-1/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-1/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE1_PORT}:${NODE1_PORT}"
@@ -73,7 +73,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-2/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-2/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE2_PORT}:${NODE2_PORT}"
@@ -92,7 +92,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-3/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-3/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE3_PORT}:${NODE3_PORT}"
@@ -111,7 +111,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-4/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-4/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE4_PORT}:${NODE4_PORT}"
@@ -130,7 +130,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-5/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-5/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE5_PORT}:${NODE5_PORT}"
@@ -149,7 +149,7 @@ services:
       LANG: en_US.UTF-8
       REDIS_PASSWORD: 123456
     volumes:
-      - ${DATA_PATH_HOST}/redis-cluster/redis-6/data:/data
+      - ${CLUSTER_DATA_PATH_HOST}/redis-6/data:/data
       - ./docker/cluster-redis.conf:/etc/redis/redis.conf
     ports:
       - "${NODE6_PORT}:${NODE6_PORT}"
